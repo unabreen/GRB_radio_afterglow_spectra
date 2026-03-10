@@ -19,7 +19,7 @@ from scipy.stats import linregress
 #second column is
 col_names = ['Frequency(Hz)','Days','Flux(mJy)','Flux uncertainty']
 
-GRB030329 = 'radio030329.dat'   
+GRB030329 = '../old_grb_sample/radio030329.dat'   
 
 redshift = 0.1685
 
