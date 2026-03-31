@@ -1,2 +1,1 @@
-processed GRB data files go here. Name will be that of original raw data file with "_processed" at the end.
-Data will be filtered for negative values, upper standard deviation limits, na values, and non numeric values.
+spectral data files go here. Name will be that of original raw data file with "{GRB name}_spectral_data({band}) where band is formatted '1.3-4.9'.
