@@ -1,0 +1,30 @@
+000301C
+000418
+000926
+010222
+010921
+011030
+021004
+021206
+030723
+
+031203
+- not enough spectral data
+redshift= 0.1055   
+luminosity distance 490.7  * 3.08568e24 pc
+
+980329
+980425
+redshift= 0.0087   # approximation
+lum_dist =  37.7 * 3.08568*10e26
+paper- https://iopscience.iop.org/article/10.1086/381230 
+
+980703
+991208
+221009A
+
+130427A
+030329
+970508
+
+redundant
