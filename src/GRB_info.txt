@@ -1,4 +1,8 @@
 000301C
+paper : https://ui.adsabs.harvard.edu/abs/2000BASI...28..499S/abstract
+redshift - 2.0335
+luminosity distance - 16144.5 *3.08568e24 pc
+
 000418
 000926
 010222
