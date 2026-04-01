@@ -36,8 +36,31 @@ paper- https://iopscience.iop.org/article/10.1086/381230
 221009A
 
 130427A
+- use
+- just 4.9-8.5 data?
 030329
+- use
 970508
 - use
 
-redundant
+
+full list of GRBs used for each band:
+1.3-4.9 = 
+030329, 
+221009A, 
+980703, 
+970508, 
+980425
+
+GRB_set_49_85 = 
+030329 
+221009A
+130427A
+980703
+970508
+980425
+000418
+
+GRB_set_85_150 =
+030329
+221009A
