@@ -11,10 +11,39 @@ lum_dist =  7705.9 * 3.08568*10e26
 use 4.9-8.5 band
 
 000926
+paper - https://ui.adsabs.harvard.edu/abs/2001BASI...29....1S/abstract
+redshift- z = 2.0377
+lum_dist = 16185.5 Mpc 
+not enough data for use
+
 010222
+paper - https://ui.adsabs.harvard.edu/abs/2002ApJ...565..829F/abstract
+https://ui.adsabs.harvard.edu/abs/2001ApJ...554L.155J/abstract
+redshift - 1.477
+lum_dist = 10878.5 Mpc 
+- no enough data in 1.3-4.9
+- not enough spectral data
+
 010921
+paper - https://scixplorer.org/abs/2003ApJ...584..931P/abstract
+redshift - 0.451
+lum_dist = 2529.9 
+- no data in 15GHz
+- some spectral data in 4.9-8.5- ambiguous
+
 011030
+paper - https://ui.adsabs.harvard.edu/abs/2005ApJ...622..977L/abstract
+X ray flash?
+z >3 ??
+
 021004
+paper- https://ui.adsabs.harvard.edu/abs/2003ApJ...595..935M/abstract
+redshift = 2.328
+lum_dist = 19053.3
+originally in microJanskys
+- no data in 15 GHz
+- keep 4.9-8.5 band
+
 021206
 030723
 
@@ -60,6 +89,8 @@ GRB_set_49_85 =
 970508
 980425
 000418
+021004
+010921 ??
 
 GRB_set_85_150 =
 030329
