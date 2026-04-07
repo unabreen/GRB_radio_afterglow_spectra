@@ -1,18 +1,15 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+
 """
-Created on Wed Jan 28 15:46:07 2026
+Created on Tue Apr  7 16:43:11 2026
 
 @author: unabreen
 """
-# working with radio data from GRB 030329
-# make spectral index plot from 4.9 and 8.5 GHz
-# flux scatter plot for 4.9 and 8.5 GHz
 
-import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
-from scipy.stats import linregress
+
 from grb_functions import light_curves
 from grb_functions import spectral_index_plots
 from grb_functions import radio_bands
@@ -37,24 +34,51 @@ Calculating spectral index;
     future comparison
     
 specific dataset information:
+    - originally in microJy
+    - no enough data in 1.3-4.9
+    - not enough spectral data
     
 """
-#first columnm observed freq in Hz- changed to GHz
+col_names = ['name',
+             'telescope',
+             'Month',
+             '3',
+             'year',
+             'Days',    #maybe day
+             'Frequency(GHz)',  # GHz 
+             'Flux(mJy)',   # possibly, unknown units
+             'Flux uncertainty',  #possibly
+             '9'
+             ]
 
-col_names = ['Frequency(GHz)','Days','Flux(mJy)','Flux uncertainty']
 
 flux_col = 'Flux(mJy)'
 flux_err_col = 'Flux uncertainty'
 freq_col = 'Frequency(GHz)'
 time_col = 'Days'
 
-filename = '../old_grb_sample/radio030329.dat'   
 
-redshift = 0.1685
+filename = '../old_grb_sample/010222.dat'
 
 
-# radio specific band limits
-upper_13 = 1.41*(1 + redshift)
+redshift= 1.477   # approximation
+lum_dist =  10878.5 * 3.08568*10e26  # Mpc-> cm
+
+
+df = pd.read_csv(filename, sep='\s+', header=None, names = col_names)
+
+#keep copy of non cleaned dataframe for reference
+df_old = df
+
+# convert microJy to milliJy- 1e-6 to 1e-3
+df[flux_col] = df[flux_col] * 1e-3
+df[flux_err_col] = df[flux_err_col] * 1e-3
+
+df = uncertainty_clean(df, flux_col, flux_err_col)
+df = clean_GRB_data(df, flux_col, flux_err_col, time_col)
+
+
+upper_13 = 1.5*(1 + redshift)
 lower_13 = 1.25*(1 + redshift)
 upper_49 = 5.1*(1 + redshift)
 lower_49 = 4.75*(1 + redshift)
@@ -63,15 +87,6 @@ lower_85 = 8.4*(1 + redshift)
 upper_150 = 16*(1 + redshift)
 lower_150 = 14.5*(1 + redshift)
 
-lum_dist = 816.4  * 3.08568e24  # Mpc to cm
-
-df = pd.read_csv(filename, sep='\s+', header = None, names = col_names)
-
-
-#change Hz to GHz
-df[freq_col] = df[freq_col]* 1e-9
-
-df = uncertainty_clean(df, flux_col, flux_err_col)
 
 
 
@@ -92,7 +107,7 @@ freq_13, freq_49, freq_85, freq_150, df= radio_bands(df,
                                                      flux_err_col= flux_err_col)
 
 
-light_curves('030329', 
+light_curves('010222', 
             
              Freq_85 = freq_85,
              Freq_49 = freq_49,
@@ -114,14 +129,8 @@ spix_49_85 = spectral_index(
     flux_col= flux_col
     )
 
-spix_13_49 = spectral_index(
-    df, 
-    lower = lower_13, 
-    upper = upper_49, 
-    freq_col= freq_col,
-    time_col= time_col,
-    flux_col= flux_col
-)
+
+
 spix_85_150 = spectral_index(df, 
     lower = lower_85, 
     upper = upper_150, 
@@ -130,23 +139,18 @@ spix_85_150 = spectral_index(df,
     flux_col= flux_col)    
 
 
-spix_13_49 = spix_13_49[(spix_13_49['alpha'] > -3) & (spix_13_49['alpha'] < 4)]
 
 
-spectral_index_plots('030329', 
-                     freq_13_49 = spix_13_49,
+spectral_index_plots('010222', 
+                     
                      freq_49_85 = spix_49_85,
                      freq_85_150= spix_85_150
                      )
 
 
-# make sure there is a folder for {GRB} spectra before saving
-#spix_13_49.to_csv('spectral data files/030329 spectra/030329_spectral_index(1.3-4.9).csv', index=True)
-#spix_49_85.to_csv('spectral data files/030329 spectra/030329_spectral_index(4.9-8.5).csv', index=True)
-#spix_85_150.to_csv('spectral data files/030329 spectra/030329_spectral_index(8.5-15).csv', index=True)
 
 
 
 
 
-
+                   

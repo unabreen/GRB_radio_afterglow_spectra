@@ -17,7 +17,7 @@ from scipy.stats import linregress
 #second column is
 col_names = ['Frequency(Hz)','Days','Flux(mJy)','Flux uncertainty']
 
-GRB130427A = 'broadbandalldata.dat'
+GRB130427A = '../old_grb_sample/broadbandalldata.dat'
 
 redshift = 0.34
 
@@ -125,6 +125,11 @@ spix_85_150 = spectral_index(df_130, 0, df_130['Frequency(Hz)'].max())
 spix_49_85 = spectral_index(df_130, lower_49, upper_85)
 spix_13_49 = spectral_index(df_130, lower_13, upper_49)    
 
+spix_13_49= spix_13_49[(spix_13_49['alpha'] <= 5) ]
+spix_13_49 = spix_13_49[(spix_13_49['alpha'] >= -3)]  
+
+spix_13_49.to_csv('130427A_spectral_index(1.3-4.9).csv', index=True)
+spix_49_85.to_csv('130427A_spectral_index(4.9-8.5).csv', index=True)
 
 
 # Flux plots

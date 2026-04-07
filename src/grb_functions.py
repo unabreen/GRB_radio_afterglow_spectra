@@ -190,10 +190,11 @@ def light_curves(
         
         ax1.set_title(f'GRB {grb_name} Flux- 15 GHz')
         ax1.set_xlabel('Days')
-        ax1.set_ylabel('Flux(erg cm^-2)')
+        ax1.set_ylabel('Flux(mJy)')
         ax1.set_xscale('log')
         ax1.set_yscale('log')
-    
+    if Freq_150 is None:
+        ax1.set_title("No data in 15 GHz")
     
     
     #8.5
@@ -209,6 +210,8 @@ def light_curves(
         ax2.set_ylabel('Flux(erg cm^-2)')
         ax2.set_xscale('log')
         ax2.set_yscale('log')
+    if Freq_85 is None:
+        ax2.set_title("No data in 8.5 GHz")
     
     #4.9
     if Freq_49 is not None:
@@ -224,7 +227,8 @@ def light_curves(
         ax3.set_ylabel('Flux(erg cm^-2)')
         ax3.set_xscale('log')
         ax3.set_yscale('log')
-    
+    if Freq_49 is None:
+        ax3.set_title("No data in 4.9 GHz")
     
     # 1.3
     if Freq_13 is not None:
@@ -239,7 +243,8 @@ def light_curves(
         ax4.set_ylabel('Flux(erg cm^-2)')
         ax4.set_xscale('log')
         ax4.set_yscale('log')
-
+    if Freq_13 is None:
+        ax4.set_title("No data in 1.3 GHz")
 
 
 def spectral_index_plots(
@@ -272,6 +277,8 @@ def spectral_index_plots(
         ax1.axhline(y=2, linestyle='--')
         ax1.axhline(y=(1/3), linestyle='--')
         ax1.axhline(y=-0.6, linestyle='--')
+    elif freq_85_150 is None:
+        ax1.set_title('No data in 8.5-15 GHz')
     
     # 4.9-8.5
     if freq_49_85 is not None:
@@ -289,6 +296,8 @@ def spectral_index_plots(
         ax2.axhline(y=2, linestyle='--')
         ax2.axhline(y=(1/3), linestyle='--')
         ax2.axhline(y=-0.6, linestyle='--')
+    elif freq_49_85 is None:
+        ax2.set_title('No data in 4.9-8.5 GHz')
     
     #1.3-4.9
     if freq_13_49 is not None:
@@ -306,6 +315,8 @@ def spectral_index_plots(
         ax3.axhline(y=2, linestyle='--')
         ax3.axhline(y=(1/3), linestyle='--')
         ax3.axhline(y=-0.6, linestyle='--')
+    elif freq_13_49 is None:
+        ax3.set_title('No data in 1.3-4.9 GHz')
 
 
 
@@ -315,8 +326,9 @@ def spectral_index_plots(
 
 def luminosity_func(df_all,
                lum_dist,
-               redshift):
-    df_all["Luminosity"] = df_all['Flux(erg cm^-2'] * 4 * np.pi * (lum_dist/(1 + redshift))**2
+               redshift,
+               flux_col):
+    df_all["Luminosity"] = df_all[flux_col] * 4 * np.pi * (lum_dist/(1 + redshift))**2
 
 
 

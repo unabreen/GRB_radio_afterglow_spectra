@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Feb 24 17:43:22 2026
+Created on Tue Apr  7 17:15:34 2026
 
 @author: unabreen
 """
+
 
 
 import pandas as pd
@@ -35,12 +36,13 @@ Calculating spectral index;
 specific dataset information:
     - originally in microJanskys
     - no data in 15 GHz
+    - keep 4.9-8.5 band
 """
 col_names = ['name',
              'telescope',
+             'Year',
              'Month',
-             '3',
-             'year',
+             '4',
              'Days',    #maybe day
              'Frequency(GHz)',  # GHz 
              'Flux(mJy)',   # possibly, unknown units
@@ -55,11 +57,11 @@ freq_col = 'Frequency(GHz)'
 time_col = 'Days'
 
 
-filename = '../old_grb_sample/980425.dat'
+filename = '../old_grb_sample/021004.dat'
 
 
-redshift= 0.0087   # approximation
-lum_dist =  37.7 * 3.08568*10e26  # Mpc-> cm
+redshift = 2.328
+lum_dist = 19053.3 * 3.08568*10e26  # Mpc-> cm
 
 
 df = pd.read_csv(filename, sep='\s+', header=None, names = col_names)
@@ -72,38 +74,37 @@ df[flux_col] = df[flux_col] * 1e-3
 df[flux_err_col] = df[flux_err_col] * 1e-3
 
 df = uncertainty_clean(df, flux_col, flux_err_col)
-                   
-                   
+df = clean_GRB_data(df, flux_col, flux_err_col, time_col)
 
-freq_13, freq_49, freq_85, freq_150, df= radio_bands(
-                                df,  
-                                upper_13=1.6*(1+redshift), 
-                                lower_13=1.2*(1+redshift), 
-                                upper_49= 5.0*(1+redshift), 
-                                lower_49= 4.6*(1+redshift), 
-                                upper_85 = 8.9*(1+redshift), 
-                                lower_85 = 8.4*(1+redshift), 
-                                upper_150 = 15*(1+redshift), 
-                                lower_150 = 15*(1+redshift), 
-                                lum_dist= lum_dist,
-                                redshift= redshift,
-                                time_col= time_col,
-                                freq_col= freq_col,
-                                flux_col= flux_col,
-                                flux_err_col = flux_err_col
-                                )
+upper_13 = 1.5*(1 + redshift)
+lower_13 = 1.25*(1 + redshift)
+upper_49 = 5.1*(1 + redshift)
+lower_49 = 4.75*(1 + redshift)
+upper_85 = 8.7*(1 + redshift)
+lower_85 = 8.35*(1 + redshift) 
+upper_150 = 16*(1 + redshift)
+lower_150 = 14.5*(1 + redshift)
 
 
-# must clean after making frequency band frames to 
-# avoid dropping duplicate values
-freq_49 = clean_GRB_data(freq_49, flux_col, flux_err_col, time_col)
-freq_13 = clean_GRB_data(freq_13, flux_col, flux_err_col, time_col)
-freq_85 = clean_GRB_data(freq_85, flux_col, flux_err_col, time_col)
-freq_150 = clean_GRB_data(freq_150, flux_col, flux_err_col, time_col)
-  
 
-    
-light_curves('980425', 
+freq_13, freq_49, freq_85, freq_150, df= radio_bands(df, 
+                                                     upper_13, 
+                                                     lower_13,
+                                                     upper_49,
+                                                     lower_49, 
+                                                     upper_85, 
+                                                     lower_85, 
+                                                     upper_150, 
+                                                     lower_150, 
+                                                     lum_dist= lum_dist, 
+                                                     redshift= redshift, 
+                                                     time_col= time_col,
+                                                     freq_col = freq_col, 
+                                                     flux_col= flux_col,
+                                                     flux_err_col= flux_err_col)
+
+
+light_curves('021004', 
             
              Freq_85 = freq_85,
              Freq_49 = freq_49,
@@ -114,14 +115,6 @@ light_curves('980425',
              flux_err_col= flux_err_col)
 
 
-upper_13=1.6*(1+redshift), 
-lower_13=1.2*(1+redshift), 
-upper_49= 5.0*(1+redshift), 
-lower_49= 4.6*(1+redshift), 
-upper_85 = 8.9*(1+redshift), 
-lower_85 = 8.4*(1+redshift), 
-upper_150 = 15*(1+redshift), 
-lower_150 = 15*(1+redshift), 
 
 spix_49_85 = spectral_index(
     df, 
@@ -140,21 +133,21 @@ spix_13_49 = spectral_index(
     time_col= time_col,
     flux_col= flux_col
 )
+ 
 
 
 
-spectral_index_plots('980425', 
+
+spectral_index_plots('021004', 
                      freq_13_49 = spix_13_49,
-                     freq_49_85 = spix_49_85
+                     freq_49_85 = spix_49_85,
                      )
-# make sure folder exists before downloading
-#spix_13_49.to_csv('spectral data files/980425 spectra/980425_spectral_index(1.3-4.9).csv', index=True)
-#spix_49_85.to_csv('spectral data files/980425 spectra/980425_spectral_index(4.9-8.5).csv', index=True)
-
-luminosity_func(df, lum_dist, redshift, flux_col)
 
 
-
+# make sure there is a folder for {GRB} spectra before saving
+#spix_13_49.to_csv('spectral data files/030329 spectra/030329_spectral_index(1.3-4.9).csv', index=True)
+spix_49_85.to_csv('spectral data files/021004 spectra/021004_spectral_index(4.9-8.5).csv', index=True)
+#spix_85_150.to_csv('spectral data files/030329 spectra/030329_spectral_index(8.5-15).csv', index=True)
 
 
 
@@ -163,4 +156,4 @@ luminosity_func(df, lum_dist, redshift, flux_col)
 
 
 
-
+                   

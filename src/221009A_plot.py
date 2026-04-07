@@ -86,11 +86,11 @@ pd.set_option('display.max_colwidth', None)  # Show full column width
 #pd.reset_option('display.max_colwidth')
 
 
+df_221 = uncertainty_clean(df_221, flux_col, flux_err_col)
+df_221 = clean_GRB_data(df_221, flux_col, flux_err_col, time_col)
 
 
-
-
-freq_13, freq_49, freq_85, freq_150= radio_bands(
+freq_13, freq_49, freq_85, freq_150, df_221= radio_bands(
                                 df_221,  
                                upper_13 = 1.41e9*(1 + redshift),
                                lower_13 = 1.25e9*(1 + redshift),
@@ -120,6 +120,7 @@ spix_85_150 = spectral_index(df_221,
                              time_col = time_col,
                              flux_col = flux_col
                              )    
+
 
 spix_49_85 = spectral_index(df_221, lower_49, upper_85,
                             freq_col= freq_col,
@@ -162,6 +163,9 @@ light_curves('221009A',
 spectral_index_plots('221009A', spix_85_150, spix_49_85, spix_13_49)
 
 
+spix_13_49.to_csv('221009A_spectral_index(1.3-4.9).csv', index=True)
+spix_49_85.to_csv('221009A_spectral_index(4.9-8.5).csv', index=True)
+spix_85_150.to_csv('221009A_spectral_index(8.5-15).csv', index=True)
 
 
 

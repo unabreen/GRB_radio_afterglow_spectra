@@ -11,6 +11,22 @@ All VLA observations
 
 not many points in each band
 
+Workflow:
+inferring column names from dataset, then set generic names for easier calculations
+Cleaning:
+    first clean for values with error above 3 standard deviations
+    after separating into frequency bands, clean for nonnegative values and
+    get rid of non numeric columns
+    
+Plotting: 
+    plot light curves for general sense of brightness/timescale
+    plot spectral index to observe for quality and get rid of outliers
+
+Calculating spectral index;
+    calculate and store in seperate dataframes, then download to csv files for
+    future comparison
+
+
 """
 
 import matplotlib.pyplot as plt
@@ -58,6 +74,7 @@ df = pd.read_csv(filename,
 
 
 df = uncertainty_clean(df, flux_col, flux_err_col)
+df = clean_GRB_data(df, flux_col, flux_err_col, time_col)
                    
                    
 
@@ -131,6 +148,12 @@ spix_49_85 = spix_49_85[spix_49_85['alpha'] > -3]
 spectral_index_plots('031203',
                      freq_49_85 = spix_49_85, 
                      freq_13_49 = spix_13_49)
+
+#spix_13_49.to_csv('031203_spectral_index(1.3-4.9).csv', index=True)
+#spix_49_85.to_csv('031203_spectral_index(4.9-8.5).csv', index=True)
+
+luminosity_func(df, lum_dist, redshift, flux_col)
+
 
 
 

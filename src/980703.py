@@ -47,6 +47,7 @@ df = pd.read_csv(filename, sep='\s+', header=None, names = col_names)
 
 
 df = uncertainty_clean(df, flux_col, flux_err_col)
+
                    
                    
 
@@ -73,7 +74,7 @@ freq_bands = [freq_13, freq_49, freq_85, freq_150]
 freq_49 = clean_GRB_data(freq_49, flux_col, flux_err_col, time_col)
 freq_13 = clean_GRB_data(freq_13, flux_col, flux_err_col, time_col)
 freq_85 = clean_GRB_data(freq_85, flux_col, flux_err_col, time_col)
-freq_150 = clean_GRB_data(freq_150, flux_col, flux_err_col, time_col)
+#freq_150 = clean_GRB_data(freq_150, flux_col, flux_err_col, time_col)
   
     
 light_curves('980703', 
@@ -118,9 +119,12 @@ spix_13_49 = spectral_index(
 
 
 spectral_index_plots('980703', 
-                     
+                     freq_49_85= spix_49_85,
                      freq_13_49 = spix_13_49
                      )
+
+spix_13_49.to_csv('980703_spectral_index(1.3-4.9).csv', index=True)
+spix_49_85.to_csv('980703spectral_index(4.9-8.5).csv', index=True)
 
 
 

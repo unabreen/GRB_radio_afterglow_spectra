@@ -556,6 +556,10 @@ spix_13_49_970= spix_13_49_970[(spix_13_49_970['alpha'] <= 5) ]
 spix_13_49_970 = spix_13_49_970[(spix_13_49_970['alpha'] >= -3)]  
 
 
+# downloading spectral data
+#spix_13_49_970.to_csv('970508_spectral_index(1.3-4.9).csv', index=True)
+#spix_49_85_970.to_csv('970508_spectral_index(4.9-8.5).csv', index=True)
+
 
 
 #980329
@@ -733,7 +737,7 @@ ax1.errorbar(x= spix_13_49_130['bin center'],
              yerr = spix_13_49_130['alpha err'],
              fmt = 'o',
              c = 'g',
-             label = '030329'
+             label = '130427A'
              )
 """
 ax1.errorbar(x= spix_13_49_980['bin center'], 
