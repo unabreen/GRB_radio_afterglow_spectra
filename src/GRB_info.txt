@@ -45,7 +45,15 @@ originally in microJanskys
 - keep 4.9-8.5 band
 
 021206
+paper - https://ui.adsabs.harvard.edu/abs/2008AIPC.1000..170W/abstract
+not enough data
+
 030723
+paper - https://iopscience.iop.org/article/10.1086/427746
+redshift - 0.38
+good light curves for 4.9 and 8.5
+- keep 4.9-8.5 band
+physical: jetted off axis GRB- complex circumburst medium through projenitor wind
 
 031203
 - not enough spectral data
@@ -53,6 +61,8 @@ redshift= 0.1055
 luminosity distance 490.7  * 3.08568e24 pc
 
 980329
+- not enough data
+
 980425
 redshift= 0.0087   # approximation
 lum_dist =  37.7 * 3.08568*10e26
@@ -61,7 +71,14 @@ paper- https://iopscience.iop.org/article/10.1086/381230
 
 980703
 - use
+
 991208
+paper- https://www.aanda.org/articles/aa/abs/2001/17/aa10587/aa10587.html
+redshift = 0.706
+lum_dist = 4357.2 Mpc
+- use 4.9-8.5 and 8.5-15 bands
+physical: massive star origin, bright optical afterglow
+
 221009A
 
 130427A
@@ -91,7 +108,10 @@ GRB_set_49_85 =
 000418
 021004
 010921 ??
+030723
+991208
 
 GRB_set_85_150 =
 030329
 221009A
+991208
