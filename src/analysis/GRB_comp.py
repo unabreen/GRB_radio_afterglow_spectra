@@ -48,8 +48,10 @@ lum_dist_980 =  37.7 * 3.08568*10e26  # Mpc -> pc -> cm
 df_980 = pd.read_csv(filename_980, sep='\s+', header=None, names = col_names_980)
 
 df_980['Frequency(Hz)'] = df_980['Frequency(Hz)'] * (10**9)
+df_980[flux_col] = df_980[flux_col] * 1e-3
+df_980[flux_err_col] = df_980[flux_err_col] * 1e-3
 
-df_980 = uncertainty_clean(df_980, flux_col, flux_err_col)
+uncertainty_clean(df_980, flux_col, flux_err_col)
                    
                    
 
@@ -133,6 +135,7 @@ GRB221009A = '../old_grb_sample/all_data.csv'
 redshift_221 = 0.151
 lum_dist_221 = 723.6 * 3.08568e24   # Mpc to m
 df_221 = pd.read_csv(GRB221009A, header = None, names = col_names_221)
+
 # specific to 221009A data file- missing values have '-', 
 #Days column not numeric
 obj_cols = df_221.select_dtypes(include=['object']).columns
@@ -752,14 +755,33 @@ ax1.errorbar(x= spix_13_49_980['bin center'],
 ax1.legend()
 
 
-luminosity_func(df_all=df_030, lum_dist=lum_dist_030, redshift=redshift_030)
-luminosity_func(df_all=df_130, lum_dist=lum_dist_130, redshift=redshift_130)
-luminosity_func(df_all=df_221, lum_dist=lum_dist_221, redshift=redshift_221)
-luminosity_func(df_all=df_970, lum_dist=lum_dist_970, redshift=redshift_970)
-luminosity_func(df_all=df_980, lum_dist=lum_dist_980, redshift=redshift_980)
+luminosity_func(df_all=df_030, 
+                lum_dist=lum_dist_030, 
+                redshift=redshift_030, 
+                flux_col= flux_col)
+
+luminosity_func(df_all=df_130, 
+                lum_dist=lum_dist_130, 
+                redshift=redshift_130,
+                flux_col= flux_col)
+                
+luminosity_func(df_all=df_221, 
+                lum_dist=lum_dist_221, 
+                redshift=redshift_221,
+                flux_col= flux_col)
+
+luminosity_func(df_all=df_970, 
+                lum_dist=lum_dist_970, 
+                redshift=redshift_970,
+                flux_col= flux_col)
+
+luminosity_func(df_all=df_980, 
+                lum_dist=lum_dist_980, 
+                redshift=redshift_980,
+                flux_col= flux_col)
 
 
-"""
+
 fig , (ax1) = plt.subplots(
     nrows = 1, 
     ncols = 1, 
@@ -788,9 +810,9 @@ ax1.scatter(df_970['Days'], df_970['Luminosity'],
 
 ax1.scatter(df_980['Days'], df_980['Luminosity'],
             c='r',
-            label= '970508')
+            label= '980425')
 
 ax1.legend() 
 
-"""
+
 

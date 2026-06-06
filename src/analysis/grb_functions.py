@@ -14,6 +14,11 @@ from scipy.stats import linregress
 
 
 
+"""
+This function filters out all flux values with an uncertainty value over
+three standard deviations. It takes the names of the
+main dataframe and the flux, flux err, and time columns.
+"""
 def uncertainty_clean(
         df_all,
         flux_col,
@@ -27,9 +32,12 @@ def uncertainty_clean(
     
     df_all = df_all[abs(df_all[flux_err_col]) <= sigma_three]
     
-    return df_all
     
     
+"""
+This function removes negative and non numeric values. It takes the names of the
+main dataframe and the flux, flux err, and time columns.
+""" 
 def clean_GRB_data(
         df_all,
         flux_col,
@@ -41,18 +49,18 @@ def clean_GRB_data(
     df_all = df_all[df_all[numeric_cols].notna().all(axis=1)]
     df_all = df_all[df_all[flux_col] >= 0]
     df_all = df_all[df_all[flux_err_col] >= 0]
-    
-
-    # Remove all duplicate rows (keeps first occurrence)
-    #df_all = df_all.sort_values(flux_err_col, ascending=True).drop_duplicates(subset=[time_col])
-    
-
-
-    
-    return df_all
+   
    
 
-
+"""
+This function takes specific dataset limits and filters measurements from
+ the main dataset into four sub dataframes using boolean indexing. It takes the
+ name of the main dataframe and its columns, and variables with the redshift 
+ adjusted band limits as values.
+ 
+ The values are corrected for redshift before filtering to match the redshift 
+ corrected band limits. It returns the four sub dataframes.
+"""
 def radio_bands(
         df_all,
         upper_13,
@@ -108,7 +116,18 @@ def radio_bands(
     return freq_13, freq_49, freq_85, freq_150, df_all
 
 
-
+"""
+This function takes the full dataframe along with upper and lower frequency
+limits and bin width to create a spectral index dataframe between the two 
+frequency limits. The spectral index is calculated as F~ nu^alpha. To calculate
+the instantaneous value, the slope of the Flux vs frequency curve between 
+the stated frequencies is measured with data points in the given bin. The 
+function loops through the time bins, each time calculating the slope of the
+points assigned to the bin using linear regression. If there are fewer than 
+two points in each bin, the loop continues to the next bin. The slope values
+ are stored in result_frame with each slope value having a corresponding
+time bin center. The function returns the result frame.
+"""
 def spectral_index(
         df_full,
         lower,
@@ -160,7 +179,12 @@ def spectral_index(
     return result_frame
 
 
-
+"""
+This function takes the sub dataframe returned from radio_bands() and plots
+them on a 2x2 figure with seperate plots for each frequency band. If a sub
+dataframe for a certain frequency does not exist, then the plot is not made and
+comments that there is no data to plot in the title.
+"""
 
 def light_curves(
         grb_name,
@@ -207,7 +231,7 @@ def light_curves(
         
         ax2.set_title(f'GRB {grb_name} Flux- 8.5 GHz')
         ax2.set_xlabel('Days')
-        ax2.set_ylabel('Flux(erg cm^-2)')
+        ax2.set_ylabel('Flux(mJy)')
         ax2.set_xscale('log')
         ax2.set_yscale('log')
     if Freq_85 is None:
@@ -224,7 +248,7 @@ def light_curves(
         
         ax3.set_title(f'GRB {grb_name} Flux- 4.9 GHz')
         ax3.set_xlabel('Days')
-        ax3.set_ylabel('Flux(erg cm^-2)')
+        ax3.set_ylabel('Flux(mJy)')
         ax3.set_xscale('log')
         ax3.set_yscale('log')
     if Freq_49 is None:
@@ -240,7 +264,7 @@ def light_curves(
         
         ax4.set_title(f'GRB {grb_name} Flux- 1.3 GHz')
         ax4.set_xlabel('Days')
-        ax4.set_ylabel('Flux(erg cm^-2)')
+        ax4.set_ylabel('Flux(mJy)')
         ax4.set_xscale('log')
         ax4.set_yscale('log')
     if Freq_13 is None:
@@ -322,7 +346,12 @@ def spectral_index_plots(
 
 
 
-
+"""
+This function calculates the luminosity corresponding to each flux measurement
+and adds a column to the main dataframe with the new values. It uses luminosity
+distance and redshift defined in a variable and the names of the dataframe and
+flux column.
+"""
 
 def luminosity_func(df_all,
                lum_dist,
