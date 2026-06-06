@@ -1,4 +1,3 @@
-# GRB_radio_afterglow_spectra
 
 # GRB Radio Afterglow Analysis
 
