@@ -271,6 +271,14 @@ def light_curves(
         ax4.set_title("No data in 1.3 GHz")
 
 
+"""
+This function takes the GRB name(number) as a string, and the spectral index
+dataframes if they exist. The default value is set to None and will result in
+an empty plot if not assigned. The spectral index values are plotted over time,
+and values corresponding to the synchrotron spectrum are plotted as horizontal
+asymptotes to more clearly visualize the spectral evolution.
+"""
+
 def spectral_index_plots(
         grb_name,
         freq_85_150= None,
