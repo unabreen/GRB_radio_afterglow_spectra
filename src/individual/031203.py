@@ -29,15 +29,11 @@ Calculating spectral index;
 
 """
 
-import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
-from scipy.stats import linregress
 from grb_functions import light_curves
 from grb_functions import spectral_index_plots
 from grb_functions import radio_bands
 from grb_functions import spectral_index
-from grb_functions import luminosity_func
 from grb_functions import clean_GRB_data
 from grb_functions import uncertainty_clean
 
@@ -45,12 +41,12 @@ col_names = ['name',
              'telescope',
              'year',
              'Month',
-             '4',
+             '4', # unknown, named as column with index 4
              'Days',    #maybe day
              'Frequency(GHz)',  # GHz for VLA at least
              'Flux',   # possibly, unknown units
              'Flux uncertainty',  #possibly
-             '9'
+             '9' # unknown, named as column with index 4
              ]
 
 
@@ -73,8 +69,8 @@ df = pd.read_csv(filename,
 
 
 
-df = uncertainty_clean(df, flux_col, flux_err_col)
-df = clean_GRB_data(df, flux_col, flux_err_col, time_col)
+uncertainty_clean(df, flux_col, flux_err_col)
+clean_GRB_data(df, flux_col, flux_err_col, time_col)
                    
                    
 
@@ -152,7 +148,6 @@ spectral_index_plots('031203',
 #spix_13_49.to_csv('031203_spectral_index(1.3-4.9).csv', index=True)
 #spix_49_85.to_csv('031203_spectral_index(4.9-8.5).csv', index=True)
 
-luminosity_func(df, lum_dist, redshift, flux_col)
 
 
 

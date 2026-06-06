@@ -30,15 +30,12 @@ not enough data for use
     
 """
 
-import matplotlib.pyplot as plt
 import pandas as pd
-import numpy as np
-from scipy.stats import linregress
+
 from grb_functions import light_curves
 from grb_functions import spectral_index_plots
 from grb_functions import radio_bands
 from grb_functions import spectral_index
-from grb_functions import luminosity_func
 from grb_functions import clean_GRB_data
 from grb_functions import uncertainty_clean
 
@@ -54,13 +51,13 @@ lum_dist= 16144.5 *3.08568e24  # Mpc to pc
 col_names = ['name',
              'telescope',
              'Month',
-             '3',
+             '3',  #unknown, named as column with index 3
              'year',
-             'Days',    #maybe day
+             'Days',    
              'Frequency(GHz)',  # GHz 
              'Flux(mJy)',   # possibly, unknown units
              'Flux uncertainty',  #possibly
-             '9'
+             '9'  #unknown, named as column with index 9
              ]
 # generic names of cols for operations
 flux_col = 'Flux(mJy)'
@@ -79,8 +76,8 @@ lower_85 = 8.4*(1+redshift)
 upper_150 = 15*(1+redshift) 
 lower_150 = 15*(1+redshift) 
 
-df = uncertainty_clean(df, flux_col, flux_err_col)
-df= clean_GRB_data(df, flux_col, flux_err_col, time_col)
+uncertainty_clean(df, flux_col, flux_err_col)
+clean_GRB_data(df, flux_col, flux_err_col, time_col)
 
 # convert to mJy from microJy
 df[flux_col] = df[flux_col] * 1e-3

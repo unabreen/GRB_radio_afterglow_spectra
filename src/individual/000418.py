@@ -4,22 +4,7 @@
 Created on Wed Apr  1 12:41:25 2026
 
 @author: unabreen
-"""
 
-
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-from scipy.stats import linregress
-from grb_functions import light_curves
-from grb_functions import spectral_index_plots
-from grb_functions import radio_bands
-from grb_functions import spectral_index
-from grb_functions import luminosity_func
-from grb_functions import clean_GRB_data
-from grb_functions import uncertainty_clean
-
-"""
 inferring column names from dataset, then set generic names for easier calculations
 Cleaning:
     first clean for values with error above 3 standard deviations
@@ -39,16 +24,27 @@ specific dataset information:
     originally in microJy, GHz
 """
 
+
+import pandas as pd
+
+from grb_functions import light_curves
+from grb_functions import spectral_index_plots
+from grb_functions import radio_bands
+from grb_functions import spectral_index
+from grb_functions import clean_GRB_data
+from grb_functions import uncertainty_clean
+
+
 col_names = ['name',
              'telescope',
              'Month',
-             '3',
+             '3', # unknown, named as column with index 3
              'year',
-             'Days',    #maybe day
+             'Days',    
              'Frequency(GHz)',  # GHz 
              'Flux(mJy)',   # possibly, unknown units
              'Flux uncertainty',  #possibly
-             '9'
+             '9' # unknown, named as column with index 3
              ]
 
 
@@ -70,6 +66,7 @@ df = pd.read_csv(filename, sep='\s+', header=None, names = col_names)
 
 # original dataframe for reference
 df_old = df
+
 # band limits
 upper_13 = 1.41*(1 + redshift)
 lower_13 = 1.25*(1 + redshift)
@@ -85,8 +82,8 @@ lower_150 = 14.5*(1 + redshift)
 df[flux_col] = df[flux_col] * 1e-3
 df[flux_err_col] = df[flux_err_col] * 1e-3
 
-df = uncertainty_clean(df, flux_col, flux_err_col)
-df = clean_GRB_data(df, flux_col, flux_err_col, time_col)
+uncertainty_clean(df, flux_col, flux_err_col)
+clean_GRB_data(df, flux_col, flux_err_col, time_col)
 
 df_post_clean = df
 
@@ -143,6 +140,7 @@ spectral_index_plots('000418',
                      )
 
 # make sure folder exists before downloading
+# lines commented out when running and redownload unwanted
 #spix_13_49.to_csv('spectral data files/980425 spectra/980425_spectral_index(1.3-4.9).csv', index=True)
 #spix_49_85.to_csv('spectral data files/000418 spectra/000418_spectral_index(4.9-8.5).csv', index=True)
 

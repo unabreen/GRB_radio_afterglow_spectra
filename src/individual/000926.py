@@ -4,23 +4,7 @@
 Created on Wed Apr  1 15:39:10 2026
 
 @author: unabreen
-"""
 
-
-
-import matplotlib.pyplot as plt
-import pandas as pd
-import numpy as np
-from scipy.stats import linregress
-from grb_functions import light_curves
-from grb_functions import spectral_index_plots
-from grb_functions import radio_bands
-from grb_functions import spectral_index
-from grb_functions import luminosity_func
-from grb_functions import clean_GRB_data
-from grb_functions import uncertainty_clean
-
-"""
 inferring column names from dataset, then set generic names for easier calculations
 Cleaning:
     first clean for values with error above 3 standard deviations
@@ -39,16 +23,31 @@ specific dataset information:
     not enough data for use
 
 """
+
+
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+from scipy.stats import linregress
+from grb_functions import light_curves
+from grb_functions import spectral_index_plots
+from grb_functions import radio_bands
+from grb_functions import spectral_index
+from grb_functions import luminosity_func
+from grb_functions import clean_GRB_data
+from grb_functions import uncertainty_clean
+
 col_names = ['name',
              'telescope',
              'Month',
-             '3',
+             '3', # unknown, named as column with index 3
              'year',
              'Days',    #maybe day
              'Frequency(GHz)',  # GHz 
              'Flux(mJy)',   # possibly, unknown units
              'Flux uncertainty',  #possibly
-             '9'
+             '9' # unknown, named as column with index 9
              ]
 
 
@@ -82,8 +81,8 @@ df[flux_err_col] = df[flux_err_col] * 1e-3
 
 df_old = df
 
-df = uncertainty_clean(df, flux_col, flux_err_col)
-df= clean_GRB_data(df, flux_col, flux_err_col, time_col)
+uncertainty_clean(df, flux_col, flux_err_col)
+clean_GRB_data(df, flux_col, flux_err_col, time_col)
                    
                    
 

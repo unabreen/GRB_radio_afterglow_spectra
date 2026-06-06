@@ -4,9 +4,7 @@
 Created on Tue Apr  7 17:07:36 2026
 
 @author: unabreen
-"""
 
-"""
 inferring column names from dataset, then set generic names for easier calculations
 Cleaning:
     first clean for values with error above 3 standard deviations
@@ -24,7 +22,7 @@ Calculating spectral index;
 specific dataset information:
     - originally in microJy
     - no 15GHz data
-    - ask vdH about 4.9-8.5 spectral index?
+    - not enough spectral data for use
     
 """
 import pandas as pd
@@ -33,20 +31,19 @@ from grb_functions import light_curves
 from grb_functions import spectral_index_plots
 from grb_functions import radio_bands
 from grb_functions import spectral_index
-from grb_functions import luminosity_func
 from grb_functions import clean_GRB_data
 from grb_functions import uncertainty_clean
 
 col_names = ['name',
              'telescope',
              'Month',
-             '3',
+             '3', # unknown, named as column with index 3
              'year',
              'Days',    #maybe day
              'Frequency(GHz)',  # GHz 
              'Flux(mJy)',   # possibly, unknown units
              'Flux uncertainty',  #possibly
-             '9'
+             '9' # unknown, named as column with index 9
              ]
 
 
@@ -69,8 +66,8 @@ lum_dist = 2529.9
 df[flux_col] = df[flux_col] * 1e-3
 df[flux_err_col] = df[flux_err_col] * 1e-3
 
-df = uncertainty_clean(df, flux_col, flux_err_col)
-df = clean_GRB_data(df, flux_col, flux_err_col, time_col)
+uncertainty_clean(df, flux_col, flux_err_col)
+clean_GRB_data(df, flux_col, flux_err_col, time_col)
 
 
 # radio specific band limits

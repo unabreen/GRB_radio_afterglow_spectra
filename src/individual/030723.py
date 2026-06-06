@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Apr  7 17:15:34 2026
+Created on Wed Apr  8 14:56:39 2026
 
 @author: unabreen
 
@@ -25,8 +25,6 @@ specific dataset information:
     - keep 4.9-8.5 band
 """
 
-
-
 import pandas as pd
 
 from grb_functions import light_curves
@@ -45,7 +43,7 @@ col_names = ['name',
              'Frequency(GHz)',  # GHz 
              'Flux(mJy)',   # possibly, unknown units
              'Flux uncertainty',  #possibly
-             '9' # unknown, named as column with index 9
+             '9' # unknown, named as column with index 4
              ]
 
 
@@ -58,8 +56,8 @@ time_col = 'Days'
 filename = '../old_grb_sample/021004.dat'
 
 
-redshift = 2.328
-lum_dist = 19053.3 * 3.08568*10e26  # Mpc-> cm
+redshift = 0.38
+lum_dist = 2064.4 * 3.08568*10e26  # Mpc-> cm
 
 
 df = pd.read_csv(filename, sep='\s+', header=None, names = col_names)
@@ -102,8 +100,7 @@ freq_13, freq_49, freq_85, freq_150, df= radio_bands(df,
                                                      flux_err_col= flux_err_col)
 
 
-light_curves('021004', 
-            
+light_curves('030723', 
              Freq_85 = freq_85,
              Freq_49 = freq_49,
              Freq_13 = freq_13,
@@ -136,22 +133,15 @@ spix_13_49 = spectral_index(
 
 
 
-spectral_index_plots('021004', 
+spectral_index_plots('030723', 
                      freq_13_49 = spix_13_49,
                      freq_49_85 = spix_49_85,
                      )
 
-
 # make sure there is a folder for {GRB} spectra before saving
-#spix_13_49.to_csv('spectral data files/030329 spectra/030329_spectral_index(1.3-4.9).csv', index=True)
-#spix_49_85.to_csv('spectral data files/021004 spectra/021004_spectral_index(4.9-8.5).csv', index=True)
-#spix_85_150.to_csv('spectral data files/030329 spectra/030329_spectral_index(8.5-15).csv', index=True)
+#spix_49_85.to_csv('spectral data files/030723 spectra/030723_spectral_index(4.9-8.5).csv', index=True)
 
 
 
 
 
-
-
-
-                   

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue Apr  7 17:15:34 2026
+Created on Wed Apr  8 14:51:12 2026
 
 @author: unabreen
 
@@ -20,12 +20,10 @@ Calculating spectral index;
     future comparison
     
 specific dataset information:
-    - originally in microJanskys
-    - no data in 15 GHz
-    - keep 4.9-8.5 band
+    - no known redshift
+    - no 15 or 1.3 GHz
+    - not using spectral data
 """
-
-
 
 import pandas as pd
 
@@ -33,8 +31,10 @@ from grb_functions import light_curves
 from grb_functions import spectral_index_plots
 from grb_functions import radio_bands
 from grb_functions import spectral_index
+from grb_functions import luminosity_func
 from grb_functions import clean_GRB_data
 from grb_functions import uncertainty_clean
+
 
 col_names = ['name',
              'telescope',
@@ -55,11 +55,11 @@ freq_col = 'Frequency(GHz)'
 time_col = 'Days'
 
 
-filename = '../old_grb_sample/021004.dat'
+filename = '../old_grb_sample/021206.dat'
 
 
-redshift = 2.328
-lum_dist = 19053.3 * 3.08568*10e26  # Mpc-> cm
+redshift = 0
+lum_dist = 0 * 3.08568*10e26  # Mpc-> cm
 
 
 df = pd.read_csv(filename, sep='\s+', header=None, names = col_names)
@@ -102,11 +102,11 @@ freq_13, freq_49, freq_85, freq_150, df= radio_bands(df,
                                                      flux_err_col= flux_err_col)
 
 
-light_curves('021004', 
+light_curves('021206', 
             
              Freq_85 = freq_85,
              Freq_49 = freq_49,
-             Freq_13 = freq_13,
+        
              time_col = time_col, 
              freq_col = freq_col, 
              flux_col= flux_col,
@@ -114,44 +114,6 @@ light_curves('021004',
 
 
 
-spix_49_85 = spectral_index(
-    df, 
-    lower = lower_49, 
-    upper = upper_85, 
-    freq_col= freq_col,
-    time_col= time_col,
-    flux_col= flux_col
-    )
-
-spix_13_49 = spectral_index(
-    df, 
-    lower = lower_13, 
-    upper = upper_49, 
-    freq_col= freq_col,
-    time_col= time_col,
-    flux_col= flux_col
-)
- 
 
 
 
-
-spectral_index_plots('021004', 
-                     freq_13_49 = spix_13_49,
-                     freq_49_85 = spix_49_85,
-                     )
-
-
-# make sure there is a folder for {GRB} spectra before saving
-#spix_13_49.to_csv('spectral data files/030329 spectra/030329_spectral_index(1.3-4.9).csv', index=True)
-#spix_49_85.to_csv('spectral data files/021004 spectra/021004_spectral_index(4.9-8.5).csv', index=True)
-#spix_85_150.to_csv('spectral data files/030329 spectra/030329_spectral_index(8.5-15).csv', index=True)
-
-
-
-
-
-
-
-
-                   
