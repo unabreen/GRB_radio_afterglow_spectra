@@ -157,7 +157,6 @@ frames_49_85 = plot_spectral_data(GRB_set_49_85_one, '4.9-8.5', GRB_color,
 plot_spectral_data(GRB_set_49_85_two, '4.9-8.5', GRB_color,
                    split = 'two')    
 
-GRB030329 = frames_49_85['030329']
 
 
 # no spectral data for 8.5- 15 for  
