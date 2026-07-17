@@ -5,7 +5,7 @@ This project analyzes radio afterglow data from gamma ray bursts (GRBs) to
 extract spectral indices and map how GRB energetics evolve over time.
 
 ## Dependencies
-Python 3.x and the following libraries:
+Python 3.14.3 and the following libraries:
 - pandas
 - matplotlib
 - numpy
