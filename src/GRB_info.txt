@@ -1,0 +1,121 @@
+000301C
+paper : https://ui.adsabs.harvard.edu/abs/2000BASI...28..499S/abstract
+redshift - 2.0335
+luminosity distance - 16144.5 *3.08568e24 pc
+not enough data for use
+
+000418
+paper - https://iopscience.iop.org/article/10.1086/321612
+redshift= 1.119
+lum_dist =  7705.9 * 3.08568*10e26
+use 4.9-8.5 band
+
+000926
+paper - https://ui.adsabs.harvard.edu/abs/2001BASI...29....1S/abstract
+redshift- z = 2.0377
+lum_dist = 16185.5 Mpc 
+not enough data for use
+
+010222
+paper - https://ui.adsabs.harvard.edu/abs/2002ApJ...565..829F/abstract
+https://ui.adsabs.harvard.edu/abs/2001ApJ...554L.155J/abstract
+redshift - 1.477
+lum_dist = 10878.5 Mpc 
+- no enough data in 1.3-4.9
+- not enough spectral data
+
+010921
+paper - https://scixplorer.org/abs/2003ApJ...584..931P/abstract
+redshift - 0.451
+lum_dist = 2529.9 
+- no data in 15GHz
+- some spectral data in 4.9-8.5- ambiguous
+
+011030
+paper - https://ui.adsabs.harvard.edu/abs/2005ApJ...622..977L/abstract
+X ray flash?
+z >3 ??
+
+021004
+paper- https://ui.adsabs.harvard.edu/abs/2003ApJ...595..935M/abstract
+redshift = 2.328
+lum_dist = 19053.3
+originally in microJanskys
+- no data in 15 GHz
+- keep 4.9-8.5 band
+
+021206
+paper - https://ui.adsabs.harvard.edu/abs/2008AIPC.1000..170W/abstract
+not enough data
+
+030723
+paper - https://iopscience.iop.org/article/10.1086/427746
+redshift - 0.38
+good light curves for 4.9 and 8.5
+- keep 4.9-8.5 band
+physical: jetted off axis GRB- complex circumburst medium through projenitor wind
+
+031203
+- not enough spectral data
+redshift= 0.1055   
+luminosity distance 490.7  * 3.08568e24 pc
+
+980329
+- redshift = 5   # approximation
+- lum_dist = 47647.9 * 3.08568*10e26  # Mpc -> pc -> cm
+- use 4.9-8.5
+
+980425
+redshift= 0.0087   # approximation
+lum_dist =  37.7 * 3.08568*10e26
+paper- https://iopscience.iop.org/article/10.1086/381230 
+- use
+
+980703
+- use
+
+991208
+paper- https://www.aanda.org/articles/aa/abs/2001/17/aa10587/aa10587.html
+redshift = 0.706
+lum_dist = 4357.2 Mpc
+- use 4.9-8.5 and 8.5-15 bands
+physical: massive star origin, bright optical afterglow
+
+221009A
+
+130427A
+- use
+- just 4.9-8.5 data?
+
+030329
+- use
+
+970508
+- use
+
+
+full list of GRBs used for each band:
+1.3-4.9 = 
+030329, 
+221009A, 
+980703, 
+970508, 
+980425
+
+GRB_set_49_85 = 
+030329 
+221009A
+130427A
+980703
+970508
+980425
+000418
+021004
+010921 ??
+030723
+991208
+
+GRB_set_85_150 =
+030329
+221009A
+991208
