@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Thu Jul 23 15:43:19 2026
+Created on Thu Jul 23 17:01:32 2026
 
 @author: unabreen
 
-Examining the evolution of the spectrum over time. Data broken into early 
-and late times to more clearly see. 
-
+modeling spectrum over time, initially split into early and late time for 
+easier viewing
 """
+
 import pandas as pd
 import numpy as np
 from grb_functions import light_curves
-from grb_functions import spectral_index_plots
 from grb_functions import radio_bands
-from grb_functions import spectral_index
-from grb_functions import luminosity_func
 from grb_functions import clean_GRB_data
 from grb_functions import uncertainty_clean
 import matplotlib.pyplot as plt
@@ -40,7 +37,7 @@ freq_col = 'Frequency(GHz)'
 time_col = 'Days'
 
 
-filename = '../old_grb_sample/980425.dat'
+filename = '../../data/raw/980425.dat'
 
 
 redshift= 0.0087   # approximation
