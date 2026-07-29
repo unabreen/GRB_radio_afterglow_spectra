@@ -143,82 +143,122 @@ fitted = fitter(initial_model, x_data, y_data )
 x_fit = np.linspace(x_min, x_max, 500)
 y_fit = fitted(x_fit)
 
-alpha_1_fit = fitted.alpha_1.value   # slope before the break
-alpha_2_fit = fitted.alpha_2.value   # slope after the break
-amplitude_fit = fitted.amplitude.value
-x_break_fit = fitted.x_break.value
+alpha_1 = fitted.alpha_1.value * -1  # slope before the break
+alpha_2 = fitted.alpha_2.value  * -1 # slope after the break
+amplitude = fitted.amplitude.value
+x_break = fitted.x_break.value
 
 # plot with fitted line
 fig, ax = plt.subplots()
 
 ax.errorbar(x= freq_13[time_col], y = freq_13[flux_col], 
             yerr= freq_13[flux_err_col], fmt = 'o')
-ax.set_title(f'1.3 GHz band with fit\nα1 = {alpha_1_fit:.4f}, α2 = {alpha_2_fit:.4f}')
+ax.set_title(f'1.3 GHz band with fit\nα1 = {alpha_1:.4f}, α2 = {alpha_2:.4f}')
 ax.set_xscale('log')
 ax.set_yscale('log')
 ax.plot(x_fit, y_fit, "r-", label="Broken power law fit")
 
 
+"""
+two peaks fitter function
 
-# 4.9 two peaks
-first_peak_mask = freq_49[time_col] < 21.44
-second_peak_mask = freq_49[time_col] >= 21.44
-first_peak = freq_49[first_peak_mask]
-second_peak = freq_49[second_peak_mask]
+Currently manually breaking sets- have to automate break points
+break 4.9 GHz set at 21.4434 seconds
+break 8.5 GHz set at 23.4361
+freq_set is frame, set_break is float of time break, freq_name is string of 
+frequency in GHz
+"""
+break_set_49 = 21.4434
+break_set_85 = 23.4361
+name_49 = 4.9
+name_85 = 8.5
+def light_curve_fit(freq_set, set_break, set_name): 
+    
+    
+    first_peak_mask = freq_set[time_col] < set_break
+    second_peak_mask = freq_set[time_col] >= set_break
+    first_peak = freq_set[first_peak_mask]
+    second_peak = freq_set[second_peak_mask]
+    
+    x_data_1 = first_peak[time_col]
+    y_data_1 = first_peak[flux_col]
+    
+    x_data_2 = second_peak[time_col]
+    y_data_2 = second_peak[flux_col]
+    
+    x_max_1 = x_data_1.max()
+    x_min_1 = x_data_1.min()
+    nu_norm_1 = y_data_1.max()  #using max instead of median due to data spread
+    break_time_1 = first_peak.loc[y_data_1.idxmax(), time_col]
+   
+    x_min_2 = x_data_2.min()
+    nu_norm_2 = y_data_2.max()
+    break_time_2 = second_peak.loc[y_data_2.idxmax(), time_col]
+    x_max_2 = ((break_time_2-x_min_2) * 2) + x_min_2
+    
+    initial_model_1 = BrokenPowerLaw1D(
+        amplitude = nu_norm_1,
+        x_break = break_time_1,
+        alpha_1 = 1,
+        alpha_2 = -1 )
+    
+    initial_model_2 = BrokenPowerLaw1D(
+        amplitude = nu_norm_2,
+        x_break = break_time_2,
+        alpha_1 = 1,
+        alpha_2 = -1 )
+    
+    
+    fitter = LMLSQFitter()
+    
+    #first peak fit
+    fitted_1 = fitter(initial_model_1, x_data_1, y_data_1, filter_non_finite= True)
+    
+    x_fit_1 = np.linspace(x_min_1, x_max_1, 500)
+    y_fit_1 = fitted_1(x_fit_1)
+    
+    #second peak fit
+    fitted_2 = fitter(initial_model_2, x_data_2, y_data_2, filter_non_finite= True )
+    
+    x_fit_2 = np.linspace(x_min_2, x_max_2, 500)
+    y_fit_2 = fitted_2(x_fit_2)
+    
+    first_alpha_1 = fitted_1.alpha_1.value *-1  # slope before the break in first peak
+    first_alpha_2 = fitted_1.alpha_2.value  *-1 # slope after the break in first peak
+    first_amplitude = fitted.amplitude.value
+    first_x_break = fitted.x_break.value
+    
+    second_alpha_1 = fitted_2.alpha_1.value  *-1 # slope before the break in second peak
+    second_alpha_2 = fitted_2.alpha_2.value  *-1 # slope after the break in second peak
+    second_amplitude = fitted.amplitude.value
+    second_x_break = fitted.x_break.value
+    
+    # plot with fitted line
+    fig, ax = plt.subplots()
+    
+    ax.errorbar(x= first_peak[time_col], y = first_peak[flux_col], 
+                yerr= first_peak[flux_err_col], fmt = 'o')
+    ax.errorbar(x= second_peak[time_col], y = second_peak[flux_col], 
+                yerr= second_peak[flux_err_col], fmt = 'o', c = 'r')
+    ax.set_title(f' {set_name} GHz band with fit\nfirst α1 = {first_alpha_1:.3f}, first α2 = {first_alpha_2:.3f},\nsecond α1 = {second_alpha_1:.3f} , second α2 = {second_alpha_2:.3f}')
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+    ax.plot(x_fit_1, y_fit_1, "b-", label="Broken power law fit 1")
+    ax.plot(x_fit_2, y_fit_2, "r-", label="Broken power law fit 2")
+    ax.legend()
+    plt.show()
+    
+    from collections import namedtuple
 
-x_data_1 = first_peak[time_col]
-y_data_1 = first_peak[flux_col]
-
-x_data_2 = second_peak[time_col]
-y_data_2 = second_peak[flux_col]
-
-x_max_1 = x_data_1.max()
-x_min_1 = x_data_1.min()
-nu_norm_1 = np.median(y_data_1)
-break_time_1 = first_peak.loc[y_data_1.idxmax(), time_col]
-
-x_max_2 = x_data_2.max()
-x_min_2 = x_data_2.min()
-nu_norm_2 = np.median(y_data_2)
-break_time_2 = second_peak.loc[y_data_2.idxmax(), time_col]
-
-initial_model_1 = BrokenPowerLaw1D(
-    amplitude = nu_norm_1,
-    x_break = break_time_1,
-    alpha_1 = 1,
-    alpha_2 = -1 )
-
-initial_model_2 = BrokenPowerLaw1D(
-    amplitude = nu_norm_2,
-    x_break = break_time_2,
-    alpha_1 = 1,
-    alpha_2 = -1 )
+    PeakFit = namedtuple('PeakFit', ['a1', 'a2', 'amp', 'brk'])
+    
+    first_peak_fits = PeakFit(a1=first_alpha_1, a2=first_alpha_2, amp=first_amplitude, brk=first_x_break)
+    second_peak_fits = PeakFit(a1=second_alpha_1, a2=second_alpha_2, amp=second_amplitude, brk=second_x_break)
 
 
-fitter = LMLSQFitter()
+    return first_peak_fits, second_peak_fits
+    
+first_peak_fits_49, second_peak_fits_49 = light_curve_fit(freq_49, break_set_49, name_49)
+first_peak_fits_85, second_peak_fits_85 = light_curve_fit(freq_85, break_set_85, name_85)
 
-#first peak fit
-fitted_1 = fitter(initial_model_1, x_data_1, y_data_1, filter_non_finite= True)
-
-x_fit_1 = np.linspace(x_min_1, x_max_1, 500)
-y_fit_1 = fitted(x_fit_1)
-
-#second peak fit
-fitted_2 = fitter(initial_model_2, x_data_2, y_data_2, filter_non_finite= True )
-
-x_fit_2 = np.linspace(x_min_2, x_max_2, 500)
-y_fit_2 = fitted(x_fit_2)
-
-
-# plot with fitted line
-fig, ax = plt.subplots()
-
-ax.errorbar(x= freq_49[time_col], y = freq_49[flux_col], 
-            yerr= freq_49[flux_err_col], fmt = 'o')
-ax.set_title(f'4.9 GHz band with fit\nα1 = , α2 = ')
-ax.set_xscale('log')
-ax.set_yscale('log')
-ax.plot(x_fit_1, y_fit_1, "r-", label="Broken power law fit 1")
-ax.plot(x_fit_2, y_fit_2, "r-", label="Broken power law fit 2")
-ax.legend()
-plt.show()
+print(first_peak_fits_49, second_peak_fits_49)
