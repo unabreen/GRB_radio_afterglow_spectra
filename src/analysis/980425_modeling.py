@@ -271,13 +271,17 @@ x_fit_1 = np.linspace(freq_49[time_col].min(), break_time_1, 500)
 x_fit_2 = np.linspace(break_time_1, break_time_2, 500)
 x_fit_3 = np.linspace(break_time_2, freq_49[time_col].max(), 500)
 
-y_fit_1 = first_peak_fits_49(x_fit_1)
+y_fit_1_1 = first_peak_fits_49(x_fit_1)
+y_fit_1_2 = second_peak_fits_49(x_fit_1)
+y_fit_1 = y_fit_1_1 + y_fit_1_2
 
 y_fit_2_1 = first_peak_fits_49(x_fit_2)
 y_fit_2_2 = second_peak_fits_49(x_fit_2)
 y_fit_2 = y_fit_2_1 + y_fit_2_2
 
-y_fit_3 = second_peak_fits_49(x_fit_3)
+y_fit_3_1 = first_peak_fits_49(x_fit_3)
+y_fit_3_2 = second_peak_fits_49(x_fit_3)
+y_fit_3 = y_fit_3_1 + y_fit_3_2
 
 fig, ax = plt.subplots()
 ax.errorbar(x= freq_49[time_col], y = freq_49[flux_col], 
