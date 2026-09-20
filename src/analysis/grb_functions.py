@@ -11,6 +11,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from scipy.stats import linregress
+from astropy.modeling.models import BrokenPowerLaw1D
+from astropy.modeling.fitting import LMLSQFitter
 
 
 
@@ -370,9 +372,70 @@ def luminosity_func(df_all,
 
 
 
+"""
+This function fits a single time spectrum solely considering nu_a as a break
+point, and finds the slopes(spectral index) before and after the break.
+The function then plots the fit lines over the spectrum.
+It takes the dataset to fit as freq_set, which is a specific dataset for one
+epoch. It takes the name of the GRB as a string, the x and y columns(and yerr)
+to fit, integer guesses for alpha1 and alpha2, and a boolean 
+controlling whether a plot is madeor not.
+"""
+
+def single_spectrum_fit(freq_set, 
+                    name,
+                    xcol,
+                    ycol,
+                    yerr_col,
+                    yerrcol,
+                    alpha1 = 1,
+                    alpha2 = -1,
+                    plot = True):
+    
+    # data to fit
+    x_data = freq_set[xcol]
+    y_data = freq_set[ycol]
+    y_err_data = freq_set[yerrcol]
+    
+    x_max = x_data.max()
+    x_min = x_data.min()
+    nu_norm = np.median(y_data)
+    break_time = freq_set.loc[y_data.idxmax(), time_col]
+    
+    
+    model = BrokenPowerLaw1D(
+        amplitude = nu_norm,  #guesses
+        alpha_1 = alpha1,
+        alpha_2 = alpha2 )
+    
+    #no masks for 1.3 GHz- 1 peak
+    
+    fitter = LMLSQFitter()
+    fitted = fitter(model, x_data, y_data )
+    
+    x_fit = np.linspace(x_min, x_max, 500)
+    y_fit = fitted(x_fit)
+    
+    # slopes before and after xbreak- reversed signs to correlate to slope
+    # and not alpha given by astropy
+    slope_1 = fitted.alpha_1.value * -1 
+    slope_2 = fitted.alpha_2.value * -1
+    x_break = fitted.x_break.value
+    
+    if plot is True:
+    
+        # plot with fitted line
+        fig, ax = plt.subplots()
+        
+        ax.errorbar(x= freq_set[xcol], y = freq_set[ycol], 
+                    yerr= freq_set[yerr_col], fmt = 'o')
+        ax.set_title(f'{name} spectrum with fit\nslope 1 = {slope_1:.4f}, slope 2 = {slope_2:.4f}')
+        ax.set_xscale('log')
+        ax.set_yscale('log')
+        ax.plot(x_fit, y_fit, "r-", label="Broken power law fit")
 
 
-
+    return fitted
 
 
 

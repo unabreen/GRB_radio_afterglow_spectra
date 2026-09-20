@@ -124,7 +124,7 @@ freq_set is frame, freq_name is string of the frequency in GHz
 default kwarg plot = True to plot the fit
 """
 
-def single_peak_fit(freq_set, freq_name, plot = True)
+def single_peak_fit(freq_set, freq_name, plot = True):
     
     # data to fit
     x_data = freq_set[time_col]
@@ -161,7 +161,7 @@ def single_peak_fit(freq_set, freq_name, plot = True)
         # plot with fitted line
         fig, ax = plt.subplots()
         
-        ax.errorbar(x= freq_13[time_col], y = freq_13[flux_col], 
+        ax.errorbar(x= freq_set[time_col], y = freq_set[flux_col], 
                     yerr= freq_13[flux_err_col], fmt = 'o')
         ax.set_title(f'{freq_name} GHz band with fit\nslope 1 = {slope_1:.4f}, slope 2 = {slope_2:.4f}')
         ax.set_xscale('log')
@@ -185,6 +185,8 @@ break_set_49 = 21.4434
 break_set_85 = 23.4361
 name_49 = 4.9
 name_85 = 8.5
+
+
 def double_peak_fit(freq_set, set_break, freq_name,
                     plot = True): 
     
@@ -198,7 +200,17 @@ def double_peak_fit(freq_set, set_break, freq_name,
     y_data_1 = first_peak[flux_col]
     
     x_data_2 = second_peak[time_col]
-    y_data_2 = second_peak[flux_col]
+    
+    y_data_2 = second_peak[flux_col] 
+    
+    
+    if freq_set == freq_85:
+        # break time based on previous bad fit of 8.5 GHz light curve
+        data_2_mask = x_data_2 < 174.7309
+        x_data_2 = x_data_2[data_2_mask]
+        y_data_2 = y_data_2[data_2_mask]
+        
+
     
     x_max_1 = x_data_1.max()
     x_min_1 = x_data_1.min()
@@ -252,7 +264,7 @@ def double_peak_fit(freq_set, set_break, freq_name,
     second_x_break = fitted.x_break.value
     
     
-    if plot = True:
+    if plot == True:
     
         # plot with fitted line
         fig, ax = plt.subplots()
@@ -273,10 +285,10 @@ def double_peak_fit(freq_set, set_break, freq_name,
     return fitted_1, fitted_2, x_min_1, x_max_abs
     #returns fit of first peak, fit of second peak, and x bounds
     
-first_peak_fits_49, second_peak_fits_49, x_min_49, x_max_49 = double_peak_fit(freq_49, break_set_49, name_49)
+first_peak_fits_49, second_peak_fits_49, x_min_49, x_max_49 = double_peak_fit(freq_49, break_set_49, name_49, plot = False)
 first_peak_fits_85, second_peak_fits_85, x_min, x_max = double_peak_fit(freq_85, break_set_85, name_85)
 
-#print(first_peak_fits_49, second_peak_fits_49)
+print(second_peak_fits_85)
 
 # superposition test for 4.9 GHz
 

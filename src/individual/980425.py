@@ -22,7 +22,15 @@ Calculating spectral index;
 specific dataset information:
     - originally in microJanskys
     - no data in 15 GHz
+    
+
+
 """
+import sys
+from pathlib import Path
+
+# Points to .../src/analysis, relative to this script's own location
+sys.path.append(str(Path(__file__).resolve().parent.parent / "analysis"))
 
 
 import pandas as pd
@@ -33,6 +41,7 @@ from grb_functions import spectral_index
 from grb_functions import luminosity_func
 from grb_functions import clean_GRB_data
 from grb_functions import uncertainty_clean
+
 
 
 col_names = ['name',
@@ -54,7 +63,9 @@ freq_col = 'Frequency(GHz)'
 time_col = 'Days'
 
 
-filename = '../old_grb_sample/980425.dat'
+
+''
+filename = '../../data/raw/980425.dat'
 
 
 redshift= 0.0087   # approximation
